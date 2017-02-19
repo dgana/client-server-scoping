@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Starter Template - Materialize</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Cookies, Session, & Storage</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">Home</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav">
+        <li><a href="#">Home</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+
+            <button id="skill_button" class="waves-effect waves-light btn" style="margin-left:20%;"><i class="material-icons left">cloud</i>Skills</button>
+
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+
+            <button data-heading="Index Page" id="index_button" class="waves-effect waves-light btn" style="margin-left:20%;"><i class="material-icons left">view_agenda</i>Index</button>
+
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+
+            <button id="meals_button" class="waves-effect waves-light btn" style="margin-left:20%;"><i class="material-icons left">av_timer</i>Meals</button>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <div class="row center">
+        <button id="primary_button" class="btn-large waves-effect waves-light orange">Click me</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="col s6 offset-s3">
+      <div class="row center">
+        <h5 id="main_text" class="header col s12 light">Click the button above to see the changes</h5>
+      </div>
+    </div>
+  </div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      $('#index_button').click(function(e){
+        let arr = []
+        let heading = $('#index_button').attr('data-heading')
+        let url = document.URL
+        $('#main_text').html(heading)
+        arr.push(heading, url)
+        localStorage.setItem('key', JSON.stringify(arr))
+      })
+
+      $('#skill_button').click(function(){
+        $.ajax({
+          type: 'GET',
+          url: 'http://localhost:3000/skills',
+          dataType: 'json',
+          success: function(data) {
+            console.log(data);
+            $('#main_text').html(data[0])
+            localStorage.setItem('key', JSON.stringify(data))
+          }
+        })
+      })
+
+      $('#meals_button').click(function(){
+        $.ajax({
+          type: 'GET',
+          url: 'http://localhost:3000/meals',
+          dataType: 'json',
+          success: function(data) {
+            console.log(data);
+            $('#main_text').html(data[0])
+            localStorage.setItem('key', JSON.stringify(data))
+          }
+        })
+      })
+
+      $('#primary_button').click(function(e){
+        let indexArr = JSON.parse(localStorage.getItem('key'))
+        let current = $('#main_text').html()
+        let arrayLength = indexArr.length
+
+        let random = Math.floor(Math.random() * 5)
+
+        if(indexArr.length === 2){
+          if (current == indexArr[0]){
+            $('#main_text').html(indexArr[1])
+          }
+          if (current == indexArr[1]) {
+            $('#main_text').html(indexArr[0])
+          }
+        } else {
+          $('#main_text').html(indexArr[random])
+        }
+
+      })
+
+    })
+  </script>
+
+  </body>
+</html>
